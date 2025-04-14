@@ -3,3 +3,6 @@
 
 # Ignorar la carpeta bin/
 bin/
+
+# SonarScanner
+.scannerwork/
