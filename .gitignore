@@ -6,3 +6,8 @@ bin/
 
 # SonarScanner
 .scannerwork/
+
+# .gitignore
+doc/_*.html
+doc/script.js
+doc/resources/

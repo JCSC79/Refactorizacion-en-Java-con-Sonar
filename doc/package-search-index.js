@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"refactorizada"},{"l":"refactorizada.dominio"},{"l":"refactorizada.gui"},{"l":"refactorizada.servicios"},{"l":"refactorizada.utilidades"}];updateSearchResults();

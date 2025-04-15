@@ -2,16 +2,51 @@ package refactorizada.servicios;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;  // Import clave para la GUI
+import java.util.List;
 import javax.swing.JTextArea;
 import refactorizada.dominio.FacturaConfiguracion;
 import refactorizada.dominio.Producto;
 
+/**
+ * Servicio para generar y formatear la representación visual de facturas.
+ * <p>
+ * Gestiona la creación de plantillas de facturas con formato estructurado,
+ * incluyendo cálculos detallados y presentación en componentes de interfaz gráfica.
+ * </p>
+ * 
+ * @author Juan Carlos Sandomingo
+ * @version 1.0
+ * @since 2025
+ * @see JTextArea
+ * @see BigDecimal
+ */
 public class ImpresionServicio {
-    
+
+    /**
+     * Genera y muestra una factura detallada en un componente de texto.
+     * <p>
+     * El formato incluye:
+     * <ol>
+     *   <li>Encabezado con título</li>
+     *   <li>Listado de productos con subtotales</li>
+     *   <li>Desglose de descuentos, impuestos y envío</li>
+     *   <li>Total final con formato monetario</li>
+     * </ol>
+     * Todos los valores se redondean a 2 decimales usando {@link RoundingMode#HALF_UP}.
+     * </p>
+     * 
+     * @param productos       Lista de productos a facturar (no nula)
+     * @param subtotal        Subtotal calculado de los productos
+     * @param config          Configuración con porcentajes aplicables
+     * @param totalFinal      Valor final ya calculado
+     * @param areaResultado   Componente gráfico donde se mostrará la factura
+     * @throws IllegalArgumentException Si algún parámetro es nulo
+     * @see FacturaConfiguracion
+     * @see BigDecimal#setScale(int, RoundingMode)
+     */
     public void imprimirFactura(List<Producto> productos, BigDecimal subtotal,
                               FacturaConfiguracion config, BigDecimal totalFinal,
-                              JTextArea areaResultado) {  // Nuevo parámetro para la GUI
+                              JTextArea areaResultado) {
         
         // Encabezado de la factura en el área de texto
         areaResultado.append("\n--- FACTURA ---\n");
@@ -19,7 +54,7 @@ public class ImpresionServicio {
         // Detalles de productos
         productos.forEach(p -> 
             areaResultado.append(
-                String.format("%s x%d = %.2f\n",  // Formato corregido
+                String.format("%s x%d = %.2f\n", 
                     p.getNombre(), 
                     p.getCantidad(), 
                     p.getSubtotal())
