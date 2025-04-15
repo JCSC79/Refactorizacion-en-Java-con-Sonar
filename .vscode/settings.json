@@ -3,5 +3,25 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar"
+    ],
+    "sonarlint.connectedMode.project": {
+        "projectKey": "JCSC79_Refactorizacion-en-Java-con-Sonar",
+        "connectionId": "sonarcloud"
+    },
+    "sonarlint.connectedMode.servers": [
+        {
+            "serverId": "sonarcloud",
+            "serverUrl": "https://sonarcloud.io",
+            "token": "7ad3578b9dc08cbedff3388ccc2c8c1332b132ce"
+        }
+    ],
+    "sonarlint.rules": {
+        "java:S106": "off",
+        "java:S1220": "off",
+        "java:S112": "on"
+    },
+    "sonarlint.exclude": [
+        "**/test/**",
+        "**/lib/**"
     ]
 }
