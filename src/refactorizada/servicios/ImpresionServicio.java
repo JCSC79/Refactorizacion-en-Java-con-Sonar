@@ -28,9 +28,10 @@ public class ImpresionServicio {
      * El formato incluye:
      * <ol>
      *   <li>Encabezado con título</li>
-     *   <li>Listado de productos con subtotales</li>
+     *   <li>Tabla de productos con alineación decimal</li>
      *   <li>Desglose de descuentos, impuestos y envío</li>
      *   <li>Total final con formato monetario</li>
+     *   <li>Pie de página con mensaje personalizado</li>
      * </ol>
      * Todos los valores se redondean a 2 decimales usando {@link RoundingMode#HALF_UP}.
      * </p>
@@ -48,31 +49,61 @@ public class ImpresionServicio {
                               FacturaConfiguracion config, BigDecimal totalFinal,
                               JTextArea areaResultado) {
         
-        // Encabezado de la factura en el área de texto
-        areaResultado.append("\n--- FACTURA ---\n");
+        // Limpiar contenido previo
+        areaResultado.setText("");
         
-        // Detalles de productos
+        // Encabezado de la factura
+        areaResultado.append("=========================================================\n");
+        areaResultado.append("                 FACTURA ELECTRÓNICA\n");
+        areaResultado.append("=========================================================\n\n");
+        
+        // Tabla de productos con alineación
+        areaResultado.append(String.format("%-20s %6s %10s %12s%n", 
+            "PRODUCTO", "CANT", "P. UNIT", "SUBTOTAL"));
+        areaResultado.append("---------------------------------------------------------\n");
+        
         productos.forEach(p -> 
             areaResultado.append(
-                String.format("%s x%d = %.2f\n", 
-                    p.getNombre(), 
-                    p.getCantidad(), 
+                String.format("%-20s %6d %10.2f€ %12.2f€%n",
+                    p.getNombre(),
+                    p.getCantidad(),
+                    p.getPrecioUnitario(),  // ← Corrección aplicada aquí
                     p.getSubtotal())
             )
         );
 
-        // Cálculos para mostrar detalles
+        // Cálculos intermedios
         BigDecimal descuento = subtotal.multiply(config.getDescuento())
                                     .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         BigDecimal impuestos = subtotal.subtract(descuento)
                                      .multiply(config.getImpuesto())
                                      .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-        // Impresión de valores en el área de texto
-        areaResultado.append(String.format("Subtotal: %.2f\n", subtotal));
-        areaResultado.append(String.format("Descuento (%.2f%%): -%.2f\n", config.getDescuento(), descuento));
-        areaResultado.append(String.format("Impuestos (%.2f%%): +%.2f\n", config.getImpuesto(), impuestos));
-        areaResultado.append(String.format("Envío: +%.2f\n", config.getEnvio()));
-        areaResultado.append(String.format("TOTAL FINAL: %.2f\n", totalFinal));
+        // Sección de totales
+        areaResultado.append("\nDETALLE DE CARGOS\n");
+        areaResultado.append(String.format("%-30s %12s%n", 
+            "Subtotal:", 
+            String.format("%.2f€", subtotal)));
+        
+        areaResultado.append(String.format("%-30s %12s%n", 
+            "Descuento (" + config.getDescuento() + "%):", 
+            "-" + descuento + "€"));
+            
+        areaResultado.append(String.format("%-30s %12s%n", 
+            "Impuestos (" + config.getImpuesto() + "%):", 
+            "+" + impuestos + "€"));
+            
+        areaResultado.append(String.format("%-30s %12s%n", 
+            "Envío:", 
+            "+" + config.getEnvio() + "€"));
+            
+        areaResultado.append(String.format("%-30s %12s%n", 
+            "TOTAL FINAL:", 
+            totalFinal + "€"));
+
+        // Pie de página
+        areaResultado.append("\n===========================================================\n");
+        areaResultado.append("               ¡Gracias por su compra!\n");
+        areaResultado.append("===========================================================\n");
     }
 }
