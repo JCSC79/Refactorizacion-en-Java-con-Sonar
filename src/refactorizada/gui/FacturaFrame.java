@@ -60,10 +60,21 @@ public class FacturaFrame extends JFrame {
   private boolean temaOscuro = false;
 
   /** Constructor de la clase FacturaFrame. */
+  @SuppressWarnings("CallToPrintStackTrace")
   public FacturaFrame() {
     configurarVentana();
     crearComponentes();
     agregarListeners();
+    try {
+      java.net.URL imgURL = getClass().getClassLoader().getResource("recursos/icono.png");
+      if (imgURL != null) {
+          setIconImage(new ImageIcon(imgURL).getImage());
+      } else {
+          System.err.println("No se encontró el archivo de icono");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /** Configura las propiedades de la ventana principal. */
@@ -72,6 +83,7 @@ public class FacturaFrame extends JFrame {
     setSize(800, 600);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
+    setResizable(false);
     setLayout(new BorderLayout());
   }
 
